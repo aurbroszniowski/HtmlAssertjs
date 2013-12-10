@@ -30,8 +30,12 @@ var HtmlAssert = function(html) {
 };
 
 HtmlAssert.it = function (title, currentTest) {
+    console.info('---------------------------');
     console.info(title);
-    currentTest();
+    var params = currentTest().toJSON();
+    console.info(params);
+    // call local server with title + json params
+    // or interpret it later
 };
 
 var Tp = HtmlAssert.prototype;
@@ -50,3 +54,6 @@ Tp.div = function() {
     }
     return this;
 };
+Tp.toJSON = function () {
+    return JSON.stringify(this.tagsList);
+}
