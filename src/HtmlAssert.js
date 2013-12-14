@@ -46,14 +46,33 @@ Tp.toString = function () {
     }
     return ret;
 };
-Tp.div = function() {
-    if (arguments.length > 0) {
-            this.tagsList.push(new Tag('div', arguments));
+//------------ list all Html tags methods
+Tp.a = function(args) {
+    return this.tag('a', args);
+};
+
+Tp.br = function(args) {
+    return this.tag('br', args);
+};
+
+Tp.div = function(args) {
+    return this.tag('div', args);
+};
+
+Tp.p = function(args) {
+    return this.tag('p', args);
+};
+
+//-------------
+Tp.tag = function(tagName, args) {
+    if (typeof args == "undefined") {
+        this.tagsList.push(new Tag(tagName, new Array()));
     } else {
-        this.tagsList.push(new Tag('div', new Array()));
+        this.tagsList.push(new Tag(tagName, args));
     }
     return this;
 };
+
 Tp.toJSON = function () {
     return JSON.stringify(this.tagsList);
 }
