@@ -25,6 +25,7 @@ Tagp.toString = function () {
 
 //-------------- HtmlAssert class
 var HtmlAssert = function (html) {
+    this.assertionError = null;
     this.tagsList = new Array();
 
     var doctype = document.implementation.createDocumentType(
@@ -50,7 +51,8 @@ HtmlAssert.it = function (title, currentTest) {
 //    console.info('-------------------');
     var found = currentTest().processTagsList();
     if (found !== true) {
-        throw title || "Assertion failed";
+        var msg = 'Error when it \'' + title + '\'. Tag not found:' + currentTest().assertionError;
+        throw msg;
     }
 
     // call local server with title + json params
@@ -110,11 +112,7 @@ Tp.findTags = function(currentNode, index) {
     var attributesMap = this.getAttributes(tag);
 
     var elements = currentNode.getElementsByTagName(tag.getTag());
-    console.info('**>> ');
-    console.info(elements);
     elements = this.removeUnmatchingElements(elements, attributesMap);
-    console.info('**>> ');
-    console.info(elements);
 
     var oneExist = false;
     index++;
@@ -123,6 +121,9 @@ Tp.findTags = function(currentNode, index) {
         oneExist = oneExist || this.findTags(elements[i], index);
     }
 
+    if (oneExist === false && this.assertionError === null) {
+        this.assertionError = JSON.stringify(tag);
+    }
     return oneExist;
 }
 
