@@ -43,12 +43,6 @@ var HtmlAssert = function (html) {
 };
 
 HtmlAssert.it = function (title, currentTest) {
-//    console.info('---------------------------');
-//    console.info(title);
-//    var params = currentTest().toJSON();
-//    console.info(params);
-//    console.info('HTML to test is ' + currentTest().html);
-//    console.info('-------------------');
     var found = currentTest().processTagsList();
     if (found !== true) {
         var msg = 'Error when it \'' + title + '\'. Tag not found:' + currentTest().assertionError;
@@ -68,28 +62,30 @@ Tp.toString = function () {
     return ret;
 };
 //------------ list all Html tags methods
-Tp.a = function(args) {
-    return this.tag('a', args);
+Tp.a = function() {
+    return this.tag('a', arguments);
 };
 
-Tp.br = function(args) {
-    return this.tag('br', args);
+Tp.br = function() {
+    return this.tag('br', arguments);
 };
 
-Tp.div = function(args) {
-    return this.tag('div', args);
+Tp.div = function() {
+    return this.tag('div', arguments);
 };
 
-Tp.p = function(args) {
-    return this.tag('p', args);
+Tp.p = function() {
+    return this.tag('p', arguments);
 };
 
 //-------------
 Tp.tag = function(tagName, args) {
-    if (typeof args == "undefined") {
+    var argsArray = Array.prototype.slice.call(args, 0);
+
+    if (typeof argsArray == "undefined") {
         this.tagsList.push(new Tag(tagName, new Array()));
     } else {
-        this.tagsList.push(new Tag(tagName, args));
+        this.tagsList.push(new Tag(tagName, argsArray));
     }
     return this;
 };
@@ -124,13 +120,23 @@ Tp.findTags = function(currentNode, index) {
     if (oneExist === false && this.assertionError === null) {
         this.assertionError = JSON.stringify(tag);
     }
+/*
+    if (oneExist === false) {
+        if (this.assertionErrorIndex === -1) {
+            this.assertionErrorIndex = index;
+            this.assertionError = 'Tag=' + tag.getTag() + ', Attr=' + tag.getAttributes();
+        } else if (this.assertionErrorIndex === index) {
+            this.assertionError = this.assertionError + ', ' + tag.getAttributes();
+        }
+    }
+*/
     return oneExist;
 }
 
 Tp.getAttributes = function(tag) {
    var attributes = tag.getAttributes();
     if ((attributes.length % 2) === 1) {
-        throw tag || " attributes should be defined in pair";
+        throw tag + " attributes should be defined in pair";
     }
     var attributesMap = {};
     for (var attributeName, attributeValue, i = 0; i < attributes.length; i+=2) {
