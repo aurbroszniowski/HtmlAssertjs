@@ -32,20 +32,6 @@ Tagp.toString = function () {
     return out;
 }
 
-
-//-------------- Mutable node
-var MutableNode = function (node, attributes) {
-    this.node = node;
-    this.attributes = attributes;
-}
-var MutableNodep = MutableNode.prototype;
-MutableNodep.getNode = function() {
-    return this.node;
-}
-MutableNodep.getAttributes = function() {
-    return this.attributes;
-}
-
 //-------------- HtmlAssert class
 var HtmlAssert = function (html) {
     this.assertionError = null;
@@ -115,7 +101,7 @@ Tp.toJSON = function () {
 }
 
 Tp.processTagsList = function() {
-    return this.findTags(new MutableNode(this.html, {}), 0);
+    return this.findTags(this.html, 0);
 }
 
 Tp.findTags = function(currentNode, index) {
@@ -124,7 +110,7 @@ Tp.findTags = function(currentNode, index) {
     }
     var tag = this.tagsList[index];
 
-    var elements = this.getElementsByTag(currentNode.getNode(), tag);
+    var elements = this.getElementsByTag(currentNode, tag);
 
     var oneExist = false;
     index++;
@@ -151,12 +137,11 @@ Tp.findTags = function(currentNode, index) {
 
 
 /**
- * This take a Node (normally an Element) into which we'll look for children Nodes (Elements), then create an Array of
- * MutableNodes that have all the attributes contained in the attributedMap.
- * Each MutableNode contain the Node reference for further search, and the attributes
+ * This takes a Node (normally an Element) into which we'll look for children Nodes (Elements) have all the attributes
+ * contained in the Tag. We return an Array for matching Nodes.
  * @param node current Node
- * @param tag tag name as
- * @returns {Array} Array of MutableNodes //TODO : refactor, actually we do not need MutableNodes, just Nodes
+ * @param tag tag we are looking for
+ * @returns {Array} Array of matching Nodes
  */
 Tp.getElementsByTag = function(node, tag) {
     var nodes = new Array();
@@ -175,83 +160,8 @@ Tp.getElementsByTag = function(node, tag) {
         }
 
         if (matching) {
-            nodes.push(new MutableNode(element, matchedAttributesMap));
+            nodes.push(element);
         }
     }
     return nodes;
-}
-
-/**
- * This look into the array of MutableNodes and remove from the Array the MutableNodes that don't contain the attributes
- * @param elements Array of MutableNode
- * @param attributesMap Map of attributes
- * @returns {*}
- */
-Tp.removeUnmatchingElements = function (elements, attributesMap) {
-    var elementsToRemove = new Array();
-
-    console.info(elements.toString());
-    console.info('before >');
-    for (var j = 0; j < elements.length; j++) {
-        console.info(elements.item(j).nodeName);
-    }
-
-    for (var element, matchedAttributesMap, i = 0; i < elements.length; i++) {
-        element = elements[i];
-        matchedAttributesMap = {};
-
-        for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
-            attr = attrs.item(j)
-            matchedAttributesMap[attr.nodeName] = attr.nodeValue;
-        }
-
-        if (!this.hashMapsAreEqual(attributesMap, matchedAttributesMap)) {
-            var idx = elements.indexOf(element);
-            if (idx != -1) {
-                elements.splice(idx, 1);
-            }
-        }
-        console.info('meantime >');
-        for (var j = 0; j < elements.length; j++) {
-            console.info(elements.item(j).nodeName);
-        }
-    }
-    return elements;
-}
-
-Tp.hashMapsAreEqual = function(map1, map2) {
-    if (Object.keys(map1).length !== Object.keys(map2).length) {
-        return false;
-    }
-
-    var keys1 = Object.keys(map1);
-    for (var s, i = 0; i < keys1.length; i++) {
-        s = keys1[i];
-        if (map1[s] === null) {
-            if (map2[s] !== null) {
-                return false;
-            }
-//        } else if (map1[s].contains("*")) {
-//            //... TODO : implement comparison with regex
-        } else if (map1[s].toUpperCase() !== map2[s].toUpperCase()) {
-            return false;
-        }
-    }
-    return true;
-}
-
-Tp.removeAll = function (elements, elementsToRemove) {
-
-    for (var i=0; i<elements.length; i++) {
-        console.info(elements.item(i));
-    }
-
-    for (var el, i = 0; i < elementsToRemove.length; i++) {
-        el = elementsToRemove[i];
-        var idx = elements.indexOf(el);
-        if (idx != -1) {
-            elements.splice(idx, 1);
-        }
-    }
-    return elements;
 }
