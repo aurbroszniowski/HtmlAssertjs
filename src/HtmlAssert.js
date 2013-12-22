@@ -115,11 +115,10 @@ Tp.findTags = function(currentNode, index) {
     var tag = this.tagsList[index];
 
     var attributesMap = this.getAttributes(tag);        //TODO refactor this can be method from Tag object
-    var elements = this.getElementsByTag(currentNode.getNode(), tag.getTag(), attributesMap);
+    var elements = this.getElementsByTag(currentNode.getNode(), tag, attributesMap);
 
     console.info("1)"+elements.toString());
     console.info("2)"+attributesMap.toString());
-//    this.removeUnmatchingElements(elements, attributesMap);
 
     var oneExist = false;
     index++;
@@ -156,17 +155,23 @@ Tp.findTags = function(currentNode, index) {
  */
 Tp.getElementsByTag = function(node, tag, attributesMap) {
     var nodes = new Array();
-    var elements = currentNode.getElementsByTagName(tag.getTag());
-    for (var attrsMap, attrs , i = 0; i < elements.length; i++) {
-        attrs = elements[i].attributes;
-        attrsMap = {};
-        for (var attrib, j = 0; j < attrs.length; j++) {
-            attrib = attrs[j];
-            attrsMap[attrib.name] = attrib.value;
-        }
-        //hashmaps are equal?
+    var elements = node.getElementsByTagName(tag.getTag());
 
-        nodes.push(new MutableNode(node, attrsMap));
+    for (var element, matchedAttributesMap, i = 0; i < elements.length; i++) {
+        element = elements[i];
+        matchedAttributesMap = {};
+
+        var matching = true;
+        for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
+            attr = attrs.item(j)
+            if (attributesMap[attr.nodeName] !== attr.nodeValue) {  //TODO add for wildcard support '*'
+                matching = false;
+            }
+        }
+
+        if (matching) {
+            nodes.push(new MutableNode(element, matchedAttributesMap));
+        }
     }
     return nodes;
 }
