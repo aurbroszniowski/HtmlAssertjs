@@ -1,15 +1,25 @@
 //-------------- Tag class
 var Tag = function(tag, attributes) {
     this.tag = tag;
-    this.attributes = attributes;
+
+    if ((attributes.length % 2) === 1) {
+        throw tag + " attributes should be defined in pair";
+    }
+    this.attributesMap = {};
+    for (var attributeName, attributeValue, i = 0; i < attributes.length; i+=2) {
+        attributeName = attributes[i];
+        attributeValue =  attributes[i + 1];
+        this.attributesMap[attributeName] = attributeValue;
+    }
 }
 var Tagp = Tag.prototype;
 Tagp.getTag = function () {
    return this.tag;
 }
-Tagp.getAttributes = function () {
-   return this.attributes;
+Tagp.getAttribute = function (key) {    //TODO add for wildcard support '*'
+   return this.attributesMap[key];
 }
+
 Tagp.toString = function () {
     var out = this.tag + '[';
     for (var i = 0; i < this.attributes.length; i++) {
@@ -114,11 +124,7 @@ Tp.findTags = function(currentNode, index) {
     }
     var tag = this.tagsList[index];
 
-    var attributesMap = this.getAttributes(tag);        //TODO refactor this can be method from Tag object
-    var elements = this.getElementsByTag(currentNode.getNode(), tag, attributesMap);
-
-    console.info("1)"+elements.toString());
-    console.info("2)"+attributesMap.toString());
+    var elements = this.getElementsByTag(currentNode.getNode(), tag);
 
     var oneExist = false;
     index++;
@@ -150,10 +156,9 @@ Tp.findTags = function(currentNode, index) {
  * Each MutableNode contain the Node reference for further search, and the attributes
  * @param node current Node
  * @param tag tag name as
- * @param attributesMap map of attributes for that tag //TODO : refactor this can be extracted from the Tag object
  * @returns {Array} Array of MutableNodes //TODO : refactor, actually we do not need MutableNodes, just Nodes
  */
-Tp.getElementsByTag = function(node, tag, attributesMap) {
+Tp.getElementsByTag = function(node, tag) {
     var nodes = new Array();
     var elements = node.getElementsByTagName(tag.getTag());
 
@@ -164,7 +169,7 @@ Tp.getElementsByTag = function(node, tag, attributesMap) {
         var matching = true;
         for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
             attr = attrs.item(j)
-            if (attributesMap[attr.nodeName] !== attr.nodeValue) {  //TODO add for wildcard support '*'
+            if (tag.getAttribute(attr.nodeName) !== attr.nodeValue) {
                 matching = false;
             }
         }
@@ -174,20 +179,6 @@ Tp.getElementsByTag = function(node, tag, attributesMap) {
         }
     }
     return nodes;
-}
-
-Tp.getAttributes = function(tag) {
-   var attributes = tag.getAttributes();
-    if ((attributes.length % 2) === 1) {
-        throw tag + " attributes should be defined in pair";
-    }
-    var attributesMap = {};
-    for (var attributeName, attributeValue, i = 0; i < attributes.length; i+=2) {
-        attributeName = attributes[i];
-        attributeValue =  attributes[i + 1];
-        attributesMap[attributeName] = attributeValue;
-    }
-    return attributesMap;
 }
 
 /**
