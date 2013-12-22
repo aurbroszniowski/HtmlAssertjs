@@ -23,6 +23,19 @@ Tagp.toString = function () {
 }
 
 
+//-------------- Mutable node
+var MutableNode = function (node, attributes) {
+    this.node = node;
+    this.attributes = attributes;
+}
+var MutableNodep = MutableNode.prototype;
+MutableNodep.getNode = function() {
+    return this.node;
+}
+MutableNodep.getAttributes = function() {
+    return this.attributes;
+}
+
 //-------------- HtmlAssert class
 var HtmlAssert = function (html) {
     this.assertionError = null;
@@ -48,9 +61,6 @@ HtmlAssert.it = function (title, currentTest) {
         var msg = 'Error when it \'' + title + '\'. Tag not found:' + currentTest().assertionError;
         throw msg;
     }
-
-    // call local server with title + json params
-    // or interpret it later
 };
 
 var Tp = HtmlAssert.prototype;
@@ -95,8 +105,7 @@ Tp.toJSON = function () {
 }
 
 Tp.processTagsList = function() {
-    var index = 0;
-    return this.findTags(this.html, index);
+    return this.findTags(new MutableNode(this.html, {}), 0);
 }
 
 Tp.findTags = function(currentNode, index) {
@@ -105,10 +114,12 @@ Tp.findTags = function(currentNode, index) {
     }
     var tag = this.tagsList[index];
 
-    var attributesMap = this.getAttributes(tag);
+    var attributesMap = this.getAttributes(tag);        //TODO refactor this can be method from Tag object
+    var elements = this.getElementsByTag(currentNode.getNode(), tag.getTag(), attributesMap);
 
-    var elements = currentNode.getElementsByTagName(tag.getTag());
-    elements = this.removeUnmatchingElements(elements, attributesMap);
+    console.info("1)"+elements.toString());
+    console.info("2)"+attributesMap.toString());
+//    this.removeUnmatchingElements(elements, attributesMap);
 
     var oneExist = false;
     index++;
@@ -133,6 +144,33 @@ Tp.findTags = function(currentNode, index) {
     return oneExist;
 }
 
+
+/**
+ * This take a Node (normally an Element) into which we'll look for children Nodes (Elements), then create an Array of
+ * MutableNodes that have all the attributes contained in the attributedMap.
+ * Each MutableNode contain the Node reference for further search, and the attributes
+ * @param node current Node
+ * @param tag tag name as
+ * @param attributesMap map of attributes for that tag //TODO : refactor this can be extracted from the Tag object
+ * @returns {Array} Array of MutableNodes //TODO : refactor, actually we do not need MutableNodes, just Nodes
+ */
+Tp.getElementsByTag = function(node, tag, attributesMap) {
+    var nodes = new Array();
+    var elements = currentNode.getElementsByTagName(tag.getTag());
+    for (var attrsMap, attrs , i = 0; i < elements.length; i++) {
+        attrs = elements[i].attributes;
+        attrsMap = {};
+        for (var attrib, j = 0; j < attrs.length; j++) {
+            attrib = attrs[j];
+            attrsMap[attrib.name] = attrib.value;
+        }
+        //hashmaps are equal?
+
+        nodes.push(new MutableNode(node, attrsMap));
+    }
+    return nodes;
+}
+
 Tp.getAttributes = function(tag) {
    var attributes = tag.getAttributes();
     if ((attributes.length % 2) === 1) {
@@ -147,10 +185,23 @@ Tp.getAttributes = function(tag) {
     return attributesMap;
 }
 
+/**
+ * This look into the array of MutableNodes and remove from the Array the MutableNodes that don't contain the attributes
+ * @param elements Array of MutableNode
+ * @param attributesMap Map of attributes
+ * @returns {*}
+ */
 Tp.removeUnmatchingElements = function (elements, attributesMap) {
     var elementsToRemove = new Array();
-    for (var element, matchedAttributesMap, i = 0; i < elementsToRemove.length; i++) {
-        element = elementsToRemove[i];
+
+    console.info(elements.toString());
+    console.info('before >');
+    for (var j = 0; j < elements.length; j++) {
+        console.info(elements.item(j).nodeName);
+    }
+
+    for (var element, matchedAttributesMap, i = 0; i < elements.length; i++) {
+        element = elements[i];
         matchedAttributesMap = {};
 
         for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
@@ -159,10 +210,17 @@ Tp.removeUnmatchingElements = function (elements, attributesMap) {
         }
 
         if (!this.hashMapsAreEqual(attributesMap, matchedAttributesMap)) {
-            elementsToRemove.add(element);
+            var idx = elements.indexOf(element);
+            if (idx != -1) {
+                elements.splice(idx, 1);
+            }
+        }
+        console.info('meantime >');
+        for (var j = 0; j < elements.length; j++) {
+            console.info(elements.item(j).nodeName);
         }
     }
-    return this.removeAll(elements, elementsToRemove);
+    return elements;
 }
 
 Tp.hashMapsAreEqual = function(map1, map2) {
@@ -177,8 +235,8 @@ Tp.hashMapsAreEqual = function(map1, map2) {
             if (map2[s] !== null) {
                 return false;
             }
-        } else if (map1[s].contains("*")) {
-            //... TODO : implement comparison with regex
+//        } else if (map1[s].contains("*")) {
+//            //... TODO : implement comparison with regex
         } else if (map1[s].toUpperCase() !== map2[s].toUpperCase()) {
             return false;
         }
@@ -187,6 +245,11 @@ Tp.hashMapsAreEqual = function(map1, map2) {
 }
 
 Tp.removeAll = function (elements, elementsToRemove) {
+
+    for (var i=0; i<elements.length; i++) {
+        console.info(elements.item(i));
+    }
+
     for (var el, i = 0; i < elementsToRemove.length; i++) {
         el = elementsToRemove[i];
         var idx = elements.indexOf(el);
