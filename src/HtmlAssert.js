@@ -1,3 +1,4 @@
+//TODO :add Lenient/Strict
 //-------------- Tag class
 var Tag = function(tag, attributes) {
     this.tag = tag;
@@ -6,11 +7,14 @@ var Tag = function(tag, attributes) {
         throw tag + " attributes should be defined in pair";
     }
     this.attributesMap = {};
+    this.nbAttributes = 0;
     for (var attributeName, attributeValue, i = 0; i < attributes.length; i+=2) {
         attributeName = attributes[i];
         attributeValue =  attributes[i + 1];
         this.attributesMap[attributeName] = attributeValue;
+        this.nbAttributes++;
     }
+
 }
 var Tagp = Tag.prototype;
 Tagp.getTag = function () {
@@ -18,6 +22,9 @@ Tagp.getTag = function () {
 }
 Tagp.getAttribute = function (key) {    //TODO add for wildcard support '*'
    return this.attributesMap[key];
+}
+Tagp.getNbAttributes = function () {
+   return this.nbAttributes;
 }
 
 Tagp.toString = function () {
@@ -55,7 +62,7 @@ HtmlAssert.it = function (title, currentTest) {
     var found = currentTest().processTagsList();
     if (found !== true) {
         var msg = 'Error when it \'' + title + '\'. Tag not found:' + currentTest().assertionError;
-        throw msg;
+        throw new Error(msg);
     }
 };
 
@@ -247,8 +254,11 @@ Tp.getElementsByTag = function(node, tag) {
         matchedAttributesMap = {};
 
         var matching = true;
-        for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
-            attr = attrs.item(j)
+        if (element.attributes.length !== tag.getNbAttributes()) {
+            matching = false;
+        }
+        else for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
+            attr = attrs.item(j);
             if (tag.getAttribute(attr.nodeName) !== attr.nodeValue) {
                 matching = false;
             }
