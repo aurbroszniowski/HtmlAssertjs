@@ -91,46 +91,81 @@ describe("HtmlAssert core", function () {
     it("test Failing Lenient Ordered Filled Div", function () {
         var html = "<div><div id=\"someid\" class=\"someNONclass\"><div class=\"someclass\" ><div></div></div></div></div>";
         var htmlAssert = new HtmlAssert(html);
-        expect( function(){
+        expect(function () {
             HtmlAssert.it("should not contain those tags", function () {
                 return htmlAssert.div("id", "someid", "class", "someclass")
             });
         }).toThrow();
     });
+
+    it("test Failing Lenient Unordered Filled Div", function () {
+        var html = "<div><div id=\"someid\" class=\"someNONclass\"><div class=\"someclass\" ><div></div></div></div></div>";
+        var htmlAssert = new HtmlAssert(html);
+        expect(function () {
+            HtmlAssert.it("should contain those tags", function () {
+                return htmlAssert.div("class", "someclass", "id", "someid")
+            });
+        }).toThrow();
+    });
+
+    it("test Failing Lenient Multiple Filled Div", function () {
+        var html = "<div><div id=\"someid\" class=\"someclass\"><div class=\"someNONclass\" ><div></div></div></div></div>";
+        var htmlAssert = new HtmlAssert(html);
+        expect(function () {
+            HtmlAssert.it("should contain those tags", function () {
+                return htmlAssert.div("id", "someid", "class", "someclass").div("class", "someclass")
+            });
+        }).toThrow();
+    });
+
+    it("test Failing Lenient Multiple Mixed Div", function () {
+        var html = "<div><div id=\"someNONid\" class=\"someclass\"><div class=\"someclass\" ><div></div></div></div></div>";
+        var htmlAssert = new HtmlAssert(html);
+        expect(function () {
+            HtmlAssert.it("should contain those tags", function () {
+                return htmlAssert.div("id", "someid", "class", "someclass").div()
+            });
+        }).toThrow();
+    });
+
+    //TODO   public void testFailingStrictOrderedFilledDiv() {
+    //TODO   public void testFailingStrictUnorderedFilledDiv() {
+    //TODO   public void testFailingStrictMultipleFilledDiv() {
+    //TODO   public void testFailingStrictMultipleMixedDiv() {
+
+    it("test Failing Lenient Too Many Attr Div", function () {
+        var html = "<div><div id=\"someid\" class=\"someclass\" hidden=\"\"><div class=\"someclass\" ><div></div></div></div></div>";
+        var htmlAssert = new HtmlAssert(html);
+        expect(function () {
+            HtmlAssert.it("should contain those tags", function () {
+                return htmlAssert.div("id", "someid", "class", "someclass")
+            });
+        }).toThrow();
+    });
+
+
+    //TODO text() function search for text
 /*
-
-    it("", function () {
-        var html = ;
+    it("test Text Value", function () {
+        var html = "<div><tr>content</tr></div>";
         var htmlAssert = new HtmlAssert(html);
         HtmlAssert.it("should contain those tags", function () {
-            return
-        });
-    });
-
-    it("", function () {
-        var html = ;
-        var htmlAssert = new HtmlAssert(html);
-        HtmlAssert.it("should contain those tags", function () {
-            return
-        });
-    });
-
-    it("", function () {
-        var html = ;
-        var htmlAssert = new HtmlAssert(html);
-        HtmlAssert.it("should contain those tags", function () {
-            return
-        });
-    });
-
-    it("", function () {
-        var html = ;
-        var htmlAssert = new HtmlAssert(html);
-        HtmlAssert.it("should contain those tags", function () {
-            return
+            return htmlAssert.div().text("content");
         });
     });
 */
+
+    /*
+
+     it("", function () {
+     var html =
+     var htmlAssert = new HtmlAssert(html);
+     HtmlAssert.it("should contain those tags", function () {
+     return
+     });
+     });
+
+     */
 
 
 });

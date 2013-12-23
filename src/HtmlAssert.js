@@ -1,4 +1,5 @@
 //TODO :add Lenient/Strict
+//
 //-------------- Tag class
 var Tag = function(tag, attributes) {
     this.tag = tag;
@@ -186,6 +187,7 @@ Tp.var = function() { return this.tag('var', arguments); };
 Tp.video = function() { return this.tag('video', arguments); };
 Tp.wbr = function() { return this.tag('wbr', arguments); };
 
+Tp.text = function() { return this.tag('text', arguments); };
 //-------------
 Tp.tag = function(tagName, args) {
     var argsArray = Array.prototype.slice.call(args, 0);
@@ -196,8 +198,8 @@ Tp.tag = function(tagName, args) {
         this.tagsList.push(new Tag(tagName, argsArray));
     }
     return this;
-};
-
+}
+//-------------
 Tp.toJSON = function () {
     return JSON.stringify(this.tagsList);
 }
