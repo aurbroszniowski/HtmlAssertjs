@@ -1,15 +1,25 @@
 {
-  "name": "HtmlAssert.ja",
-  "version": "0.0.1",
-  "description": "An HTML testing framework",
-  "author": "Aurelien <aurelien@jsoft.biz>",
-  "engines": {
-    "node": ">= 0.4.x"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "jshint": "~2.3.0",
-    "grunt-contrib-jshint": "~0.7.2"
-  }
+    "name": "HtmlAssert.ja",
+    "version": "0.0.1",
+    "description": "A fluent HTML testing api",
+    "author": "Aurelien Broszniowski <aurelien@jsoft.biz>",
+    "homepage": "https://github.com/jsoftbiz/HtmlAssert.js",
+    "engines": {
+        "node": ">= 0.4.x"
+    },
+    "main": "./lib/index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jsoftbiz/HtmlAssert.js.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-jasmine": "~0.5.2",
+        "jshint": "~2.3.0",
+        "grunt-contrib-jshint": "~0.7.2"
+    },
+    "scripts": {
+        "test": "grunt test"
+    }
 }
