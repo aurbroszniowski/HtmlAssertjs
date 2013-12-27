@@ -75,7 +75,7 @@ Tp.toString = function () {
     }
     return ret;
 };
-//------------ list all Html tags methods
+//------------ list all Html 5 tags methods
 
 Tp.a = function() { return this.tag('a', arguments); };
 Tp.abbr = function() { return this.tag('abbr', arguments); };
@@ -207,7 +207,13 @@ Tp.toJSON = function () {
 Tp.processTagsList = function() {
     return this.findTags(this.html, 0);
 }
-
+/**
+ * This method will take a Tag from the array of html Tag objects (this.tagsList) and look into the Html recursively if the
+ * tag is found somewhere below the current position in the DOM
+ * @param currentNode the document from where we start looking in the DOM
+ * @param index index in the tagsList array of tag (basically what tag we're currently looking for at this point of the DOM)
+ * @returns {boolean} true if the tag with all attributes is found somewhere below the current position in the DOM
+ */
 Tp.findTags = function(currentNode, index) {
     if (index == this.tagsList.length) { // if we reach this, then we found all tags in stack
         return true;
@@ -259,14 +265,24 @@ Tp.getElementsByTag = function(node, tag) {
         if (element.attributes.length !== tag.getNbAttributes()) {
             matching = false;
         }
-        else for (var attr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
+        else for (var attr, tagAttr, j = 0, attrs = element.attributes, l = attrs.length; j < l; j++) {
             attr = attrs.item(j);
-            if (tag.getAttribute(attr.nodeName) !== attr.nodeValue) {
+            tagAttr = tag.getAttribute(attr.nodeName);
+            if (typeof tagAttr != 'undefined') {
+                if (tagAttr.indexOf("*") != -1) {
+                    tagAttr = tagAttr.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&');
+                    tagAttr = tagAttr.replace(/\*/g, ".*");
+                    var matcher = new RegExp(tagAttr, "g");
+                    matching = matcher.test(attr.nodeValue);
+                } else if (tagAttr !== attr.nodeValue) {
+                    matching = false;
+                }
+            } else if (tagAttr !== attr.nodeValue) {
                 matching = false;
             }
         }
 
-        if (matching) {
+    if (matching) {
             nodes.push(element);
         }
     }

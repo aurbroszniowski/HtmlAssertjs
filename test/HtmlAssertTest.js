@@ -143,6 +143,14 @@ describe("HtmlAssert core", function () {
         }).toThrow();
     });
 
+    it("test Attribute with wildcards", function () {
+        var html = " <td class=\"main_column main_column1\" title=\"1.26e+3k  (1257592)\" style=\"min-width: 166px; width: 166px; max-width: 166px;\"></td>";
+        var htmlAssert = new HtmlAssert(html);
+        HtmlAssert.it("should contain those tags", function () {
+            return htmlAssert.td("class", "main_column main_column1", "title", "1.26*)", "style", "min-width: *; width: *; max-width: *;")
+        });
+    });
+
 
     //TODO text() function search for text
 /*
@@ -168,5 +176,18 @@ describe("HtmlAssert core", function () {
      */
 
 
+});
+
+describe("Javascript subfunction testing", function () {
+
+    it("test a wildcard", function () {
+        var html = "somealse";
+        var tagAttr = 'so*e*se';
+        if (tagAttr.indexOf("*") != -1) {
+            tagAttr = tagAttr.replace(/\*/g, ".*");
+        }
+        var matcher = new RegExp(tagAttr, "g");
+        expect(matcher.test(html)).toBe(true);
+    });
 });
 
