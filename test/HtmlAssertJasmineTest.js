@@ -8,7 +8,7 @@ casper.test.begin('HtmlAssert core', 0, function suite(test) {
 
     var html = "<dZv><p><div class=\"someclass\" id=\"someid\"></div></p></dZv>";
     var htmlToTest = htmlassert.containing(html);
-    console.log('>>'+htmlToTest.contains.toString());
+    console.log(htmlToTest.contains.p().div("id", "someid", "class", "someclass").toString());
 //    htmlassert.that("it is a first test", htmlToTest.cin.p().div("id", "someid", "class", "someclass"));
 
     test.done();
