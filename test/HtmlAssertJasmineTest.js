@@ -1,12 +1,15 @@
-//var htmlassert = require("../lib/htmlassert.js");
-describe("HtmlAssert core", function () {
+var htmlassert = require("../lib/htmlassert.js");
 
-    it("test a passing div", function () {
-        console.log('eeee');
-        var htmlassert = new MY_HTMLASSERT_MODULE;
 
-        var html = "<dZv><p><div class=\"someclass\" id=\"someid\"></div></p></dZv>";
-        var htmlToTest = htmlassert.containing(html);
-        htmlassert.that("it is a first test", htmlToTest.contains.p().div("id", "someid", "class", "someclass"));
-    });
+casper.test.begin('HtmlAssert core', 0, function suite(test) {
+
+
+    console.log('eeee');
+
+    var html = "<dZv><p><div class=\"someclass\" id=\"someid\"></div></p></dZv>";
+    var htmlToTest = htmlassert.containing(html);
+    console.log('>>'+htmlToTest.contains.toString());
+//    htmlassert.that("it is a first test", htmlToTest.cin.p().div("id", "someid", "class", "someclass"));
+
+    test.done();
 });

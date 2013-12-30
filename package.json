@@ -1,32 +1,30 @@
 {
-  "name": "htmlassert.js",
-  "version": "0.0.2",
-  "description": "A fluent HTML testing api to assert HTML path and content",
-  "author": "Aurelien Broszniowski <aurelien@jsoft.biz>",
-  "homepage": "https://github.com/jsoftbiz/HtmlAssert.js",
-  "engines": {
-    "node": ">= 0.4.x"
-  },
-  "main": "./lib/index",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jsoftbiz/HtmlAssert.js.git"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "jshint": "~2.3.0",
-    "grunt-contrib-jshint": "~0.7.2"
-  },
-  "scripts": {
-    "test": "grunt test"
-  },
-  "bugs": {
-    "url": "https://github.com/jsoftbiz/HtmlAssert.js/issues"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "license": "BSD-2-Clause"
+    "name": "htmlassert.js",
+    "version": "0.0.2",
+    "description": "A fluent HTML testing api to assert HTML path and content",
+    "author": "Aurelien Broszniowski <aurelien@jsoft.biz>",
+    "homepage": "https://github.com/jsoftbiz/HtmlAssert.js",
+    "engines": {
+        "node": ">= 0.4.x"
+    },
+    "main": "./lib/index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jsoftbiz/HtmlAssert.js.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-casperjs": "~1.4.0"
+    },
+    "scripts": {
+        "test": "grunt test"
+    },
+    "bugs": {
+        "url": "https://github.com/jsoftbiz/HtmlAssert.js/issues"
+    },
+    "directories": {
+        "test": "test"
+    },
+    "license": "BSD-2-Clause"
 }
