@@ -1,6 +1,5 @@
 var htmlassert = require("../lib/htmlassert.js");
 
-
 casper.test.begin('HtmlAssert core', 0, function suite(test) {
 
     var html;
@@ -9,6 +8,10 @@ casper.test.begin('HtmlAssert core', 0, function suite(test) {
     html = "<dZv><p><div class=\"someclass\" id=\"someid\"></div></p></dZv>";
     htmlToTest = htmlassert.containing(html);
     test.assert(htmlassert.that("it tests a passing div", htmlToTest.contains.p().div("id", "someid", "class", "someclass")));
+
+    html = "<p><div class=\"someclass&nbsp;\"></div></p>";
+    htmlToTest = htmlassert.containing(html);
+    test.assert(htmlassert.that("it tests a & with a wildcard", htmlToTest.contains.p().div("class", "*&nbsp;")));
 
 
     html = " <div>           <td title=\"en-gb\"\n" +
