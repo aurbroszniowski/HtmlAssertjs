@@ -1,7 +1,7 @@
-HtmlAssert.js
+HtmlAssertjs
 =============
 
-HtmlAssert.js is a Javascript DSL based assertion API to assert HTML path and content.
+HtmlAssertjs is a Javascript DSL based assertion API to assert HTML path and content.
 
 Huh? What?
 ----------
@@ -21,9 +21,9 @@ And you have a (javascript) test that needs to verify that you *actually* have :
 - inside this &lt;p>, a &lt;span> tag.
 
 
-HtmlAssert.js is the answer to this problem by providing an easy API that will let you write such assertions.
+HtmlAssertjs is the answer to this problem by providing an easy API that will let you write such assertions.
 
-HtmlAssert.js uses a DSL based interface, using methods chaining, in order to allow to write tests that are as explicit as possible.
+HtmlAssertjs uses a DSL based interface, using methods chaining, in order to allow to write tests that are as explicit as possible.
 Testing the above HTML code would be done like this :
 
     htmlassert.that("it tests a passing div", htmlToTest.contains.div("id", "someid").p("class","someClass").span());
@@ -34,11 +34,11 @@ Quickstart
 
 1) Include the library in your project:
 
-    npm install htmlassert.js --save-dep
+    npm install htmlassertjs --save-dep
 
 2) This is how we write a simple test:
 
-    var htmlassert = require("htmlassert.js");
+    var htmlassert = require("htmlassertjs");
 
     var html = "<p><div class=\"someclass\" id=\"someid\"></div></p>";
 
@@ -72,7 +72,7 @@ At this point, you can call several assertions on the same html object, e.g.:
 
 4) By default, the assertion is lenient, it means that if you do not need to include all tags in your assertion:
 
-    var htmlassert = require("htmlassert.js");
+    var htmlassert = require("htmlassertjs");
 
     var html = "<p><div class=\"someclass\"><span></span></div></p>";
 
@@ -99,7 +99,7 @@ both of those assertions will work, even the second where you did not indicated 
 Problems?
 -------------
 I'm not an expert in Javascript, so if you have any feedback, you're welcome to do it, please raise a issue on github : 
-[HtmlAssert.js issues and comments](https://github.com/jsoftbiz/HtmlAssert.js/issues) 
+[HtmlAssertjs issues and comments](https://github.com/aurbroszniowski/HtmlAssertjs/issues)
 
 Contributing
 ------------

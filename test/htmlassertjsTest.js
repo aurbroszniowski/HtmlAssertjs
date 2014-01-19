@@ -1,9 +1,20 @@
-var htmlassert = require("../lib/htmlassert.js");
+var htmlassert = require("../lib/htmlassertjs");
 
 casper.test.begin('HtmlAssert core', 0, function suite(test) {
 
     var html;
     var htmlToTest;
+
+//    html = "<div class=\"one\"><p><div id=\"someid1\"></div></p><p><div id=\"someid2\"></div></p></div>";
+//    htmlToTest = htmlassert.containing(html);
+//    test.assert(htmlassert.that("it tests nested Html",
+//        htmlToTest.contains.
+//            div("class", "one")
+//                .p().div("id", "someid1")._div()._p()
+//                .p().div("id", "someid2")._div()._p()
+//            ._div()
+//    ));
+
 
     html = "<dZv><p><div class=\"someclass\" id=\"someid\"></div></p></dZv>";
     htmlToTest = htmlassert.containing(html);

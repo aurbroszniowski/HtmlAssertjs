@@ -1,16 +1,16 @@
 {
-    "name": "htmlassert.js",
+    "name": "htmlassertjs",
     "version": "0.0.5",
     "description": "A fluent HTML testing api to assert HTML path and content",
     "author": "Aurelien Broszniowski <aurelien@jsoft.biz>",
-    "homepage": "https://github.com/jsoftbiz/HtmlAssert.js",
+    "homepage": "https://github.com/aurbroszniowski/HtmlAssertjs",
     "engines": {
         "node": ">= 0.4.x"
     },
     "main": "./lib/htmlassert",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jsoftbiz/HtmlAssert.js.git"
+        "url": "https://github.com/aurbroszniowski/HtmlAssertjs.git"
     },
     "dependencies": {},
     "devDependencies": {
@@ -21,10 +21,10 @@
         "test": "grunt test"
     },
     "bugs": {
-        "url": "https://github.com/jsoftbiz/HtmlAssert.js/issues"
+        "url": "https://github.com/aurbroszniowski/HtmlAssertjs/issues"
     },
     "directories": {
         "test": "test"
     },
-    "license": "BSD-2-Clause"
+    "license": "GNU Lesser General Public License"
 }
