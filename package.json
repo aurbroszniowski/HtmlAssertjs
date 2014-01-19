@@ -1,6 +1,6 @@
 {
     "name": "htmlassertjs",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "A fluent HTML testing api to assert HTML path and content",
     "author": "Aurelien Broszniowski <npm@jsoft.biz>",
     "homepage": "https://github.com/aurbroszniowski/HtmlAssertjs",
