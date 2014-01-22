@@ -1,13 +1,13 @@
 {
     "name": "htmlassertjs",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "A fluent HTML testing api to assert HTML path and content",
     "author": "Aurelien Broszniowski <npm@jsoft.biz>",
     "homepage": "https://github.com/aurbroszniowski/HtmlAssertjs",
     "engines": {
         "node": ">= 0.4.x"
     },
-    "main": "./lib/htmlassert",
+    "main": "./lib/htmlassertjs",
     "repository": {
         "type": "git",
         "url": "https://github.com/aurbroszniowski/HtmlAssertjs.git"
